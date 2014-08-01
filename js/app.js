@@ -1,10 +1,11 @@
 // JavaScript
 $( document ).ready(function() {
     console.log( "ready!" );
-    createTable();
+    var board = new Gameboard();
+    createTable(board.matrix);
 });
 
-var createTable = function() {
+var createTable = function(matrix) {
   var $td, $tr, $input;
   var $table = $('<table>');
   var $gameboard = $('.gameboard');
@@ -17,7 +18,8 @@ var createTable = function() {
       // Build the input
       $input = $('<input>')
         .attr('maxlength','1')
-        .addClass('inputBox');
+        .addClass('inputBox')
+        .val(matrix[i][j]);
       $td = $('<td>').append($input);
       $tr.append($td);
     }

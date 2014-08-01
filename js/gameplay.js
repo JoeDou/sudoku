@@ -7,60 +7,68 @@
   // [9, 6, 1, 5, 3, 7, 2, 8, 4],
   // [2, 8, 7, 4, 1, 9, 6, 3, 5],
   // [3, 4, 5, 2, 8, 6, 1, 7, 9]];
+function Gameboard(){
+
+  this.matrix =
+   [['5', '3', '', '', '7', '', '', '', ''],
+    ['6', '', '', '1', '9', '5', '', '', ''],
+    ['1', '9', '8', '', '', '', '', '6', ''],
+    ['8', '', '', '', '6', '', '', '', '3'],
+    ['4', '', '', '8', '', '3', '', '', '1'],
+    ['7', '', '', '', '2', '', '', '', '6'],
+    ['', '6', '', '', '', '', '2', '8', ''],
+    ['', '', '', '4', '1', '9', '', '', '5'],
+    ['', '', '', '', '8', '', '', '7', '9']];
+
+  this.solution = [];
+  
+  this._rowHash = [];
+  this._rowStack = [];
+  this._colHash = [];
+  this._colStack = [];
+  this._secHash = {};
+  this._secStack = {};
 
 
-var matrix =
- [[5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [1, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9]];
+  this.initialize();
+  this.findSolution(this.matrix);
 
-var rowHash = [];
-var rowStack = [];
-var colHash = [];
-var colStack = [];
-var secHash = {};
-var secStack = {};
+}
 
-var determineSection = function(col, row){
-  rowSec = Math.floor(row / 3);
-  colSec = Math.floor(col / 3);
+Gameboard.prototype.determineSection = function(col, row){
+  var rowSec = Math.floor(row / 3);
+  var colSec = Math.floor(col / 3);
   return "" + colSec + rowSec;
 };
 
-var initialize = function(){
+Gameboard.prototype.initialize = function(){
   for (var i=0; i<9; i++){
-    rowHash.push({});
-    rowStack.push([]);
-    colHash.push({});
-    colStack.push([]);
+    this._rowHash.push({});
+    this._rowStack.push([]);
+    this._colHash.push({});
+    this._colStack.push([]);
     var secString = ''+ Math.floor(i/3)+(i%3);
-    secHash[secString] = {};
-    secStack[secString]= [];
+    this._secHash[secString] = {};
+    this._secStack[secString]= [];
   }
   for (var row =0; row < 9; row++){
     for (var col=0; col < 9; col++){
-      var value = matrix[row][col];
+      var value = this.matrix[row][col];
       if (value){
-        rowHash[row][value] = true;
-        colHash[col][value] = true;
-        var secKey = determineSection(col,row);
+        this._rowHash[row][value] = true;
+        this._colHash[col][value] = true;
+        var secKey = this.determineSection(col,row);
         var key = ''+col+row;
-        secHash[secKey][value] = true;
+        this._secHash[secKey][value] = true;
       }
     }
   }
 };
 
-var findEmpty = function(matrix){
-  for (var rowIndex=0; rowIndex < 9; rowIndex++){
-    for (var colIndex=0; colIndex<9; colIndex++){
-      if (matrix[rowIndex][colIndex] === 0){
+Gameboard.prototype.findEmpty = function(matrix){
+  for (var rowIndex=0; rowIndex < matrix.length; rowIndex++){
+    for (var colIndex=0; colIndex < matrix[0].length; colIndex++){
+      if (matrix[rowIndex][colIndex] === ''){
         return [colIndex, rowIndex];
       }
     }
@@ -68,29 +76,29 @@ var findEmpty = function(matrix){
   return null;
 };
 
-var traverse = function(maxtrix){
-  var arr = findEmpty(maxtrix);
+Gameboard.prototype.findSolution = function(maxtrix){
+  var arr = this.findEmpty(maxtrix);
   if (arr === null){
     return true;
   }
   var col = arr[0];
   var row = arr[1];
 
-  var secKey = determineSection(col,row);
+  var secKey = this.determineSection(col,row);
   for (var i=1; i<10; i++){
-    if (!rowHash[row][i] && !colHash[col][i] && !secHash[secKey][i]){
-      matrix[row][col] = i;
-      rowHash[row][i] = true;
-      rowStack[row].push(i);
-      colHash[col][i] = true;
-      colStack[col].push(i);
-      secHash[secKey][i] = true;
-      secStack[secKey].push(i);
-      if (!traverse(matrix)){
-        matrix[row][col] = 0;
-        rowHash[row][rowStack[row].pop()] = false;
-        colHash[col][colStack[col].pop()] = false;
-        secHash[secKey][secStack[secKey].pop()] = false;
+    if (!this._rowHash[row][i] && !this._colHash[col][i] && !this._secHash[secKey][i]){
+      this.matrix[row][col] = ''+i;
+      this._rowHash[row][i] = true;
+      this._rowStack[row].push(i);
+      this._colHash[col][i] = true;
+      this._colStack[col].push(i);
+      this._secHash[secKey][i] = true;
+      this._secStack[secKey].push(i);
+      if (!this.findSolution(this.matrix)){
+        this.matrix[row][col] = '';
+        this._rowHash[row][this._rowStack[row].pop()] = false;
+        this._colHash[col][this._colStack[col].pop()] = false;
+        this._secHash[secKey][this._secStack[secKey].pop()] = false;
       } else{
         return true;
       }
@@ -99,8 +107,6 @@ var traverse = function(maxtrix){
   return false;
 };
 
-initialize();
-traverse(matrix);
 
 
 
