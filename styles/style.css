@@ -1,5 +1,15 @@
-.inputBox{
+.inputBox {
   text-align: center;
-  width: 20px;
-  height:20px;
-}
+  color: #1ebad6;
+  width: 40px;
+  height: 40px;
+  border: 0px;
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 25px; }
+
+.sectionOdd {
+  background-color: #1ebad6;
+  color: white; }
+
+.sectionEven {
+  background-color: #1ebad6; }

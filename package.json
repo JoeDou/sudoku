@@ -1,0 +1,25 @@
+{
+  "name": "sudoku",
+  "version": "0.0.0",
+  "description": "Sudoku Game",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JoeDou/sudoku.git"
+  },
+  "author": "Joe Dou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoeDou/sudoku/issues"
+  },
+  "homepage": "https://github.com/JoeDou/sudoku",
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-concat": "^2.2.0",
+    "gulp-sass": "^0.7.2",
+    "gulp-watch": "^0.6.8"
+  }
+}
