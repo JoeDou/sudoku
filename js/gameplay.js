@@ -114,51 +114,8 @@ Gameboard.prototype.createTable = function() {
     this.jmatrix.push(tempArr);
   }
   $gameboard.append($table);
-  this.createMsg();
-};
-
-Gameboard.prototype.createMsg = function(){
-  $complete = $('<div>');
-  $complete.addClass('complete');
-
-  $text = $('<p>').text('You Win');
-
-  $completeButton = $('<button>');
-  $completeButton.text('Close')
-    .click(function(){
-      this.hideMsg();
-    }.bind(this));
-
-  $complete.append($text).append($completeButton).hide();
-
-  $('.gameboard').append($complete);
-};
-
-Gameboard.prototype.showMsg = function(){
-  $msg = $('.complete');
-  $msg.show();
-};
-
-Gameboard.prototype.hideMsg = function(){
-  $msg = $('.complete');
-  $msg.hide();
-};
-
-Gameboard.prototype.restart = function() {
-  this.initialize();
-  this.loadHashStack();
-  for (var row=0; row<9; row++){
-    for (var col=0; col<9; col++){
-      this.jmatrix[row][col].val(this.matrix[row][col]);
-      this.jmatrix[row][col].parent().removeClass('wrongAnswer');
-      this.jmatrix[row][col].parent().removeClass('hint');
-      if (this.matrix[row][col] === ''){
-        this.jmatrix[row][col].attr('readOnly', false);
-      }else{
-        this.jmatrix[row][col].attr('readOnly', true);
-      }
-    }
-  }
+  createMsg();
+  createLevelSelection();
 };
 
 Gameboard.prototype.hint = function() {
@@ -179,7 +136,7 @@ Gameboard.prototype.hint = function() {
     .parent().addClass('hint');
 
   if(isComplete()){
-    this.showMsg();
+    showMsg();
   }
 };
 
@@ -193,9 +150,15 @@ Gameboard.prototype.createSolution = function() {
   this.findSolution(this.solution);
 };
 
-Gameboard.prototype.createProblem = function(){
+Gameboard.prototype.createProblem = function(level){
   this.matrix = $.extend(true,[],this.solution);
-  var remove = 30;
+  var selection = {
+    easy: 25,
+    medium: 40,
+    hard: 55
+  };
+  var remove = selection[level];
+  console.log('removed', remove);
 
   while( remove > 0 ) {
     var row = Math.floor( Math.random() * 9 );
@@ -205,13 +168,30 @@ Gameboard.prototype.createProblem = function(){
   }
 };
 
-Gameboard.prototype.startNewGame = function(){
+Gameboard.prototype.startNewGame = function(level){
   this.createSolution();
-  this.createProblem();
+  this.createProblem(level);
   if (this.jmatrix.length === 0){
     this.createTable();
   }
   this.restart();
+};
+
+Gameboard.prototype.restart = function() {
+  this.initialize();
+  this.loadHashStack();
+  for (var row=0; row<9; row++){
+    for (var col=0; col<9; col++){
+      this.jmatrix[row][col].val(this.matrix[row][col]);
+      this.jmatrix[row][col].parent().removeClass('wrongAnswer');
+      this.jmatrix[row][col].parent().removeClass('hint');
+      if (this.matrix[row][col] === ''){
+        this.jmatrix[row][col].attr('readOnly', false);
+      }else{
+        this.jmatrix[row][col].attr('readOnly', true);
+      }
+    }
+  }
 };
 
 

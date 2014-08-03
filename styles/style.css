@@ -84,3 +84,19 @@ header {
     margin: 10px;
     font-size: 12px;
     background-color: #1ebad6; }
+
+.level {
+  background: black;
+  width: 360px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  color: #1ebad6;
+  margin-left: auto;
+  margin-right: auto;
+  top: 290px;
+  position: fixed;
+  text-align: center; }
+  .level button {
+    margin: 10px;
+    font-size: 12px;
+    background-color: #1ebad6; }

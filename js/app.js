@@ -2,7 +2,7 @@
 $( document ).ready(function() {
   console.log( "ready!" );
   var board = new Gameboard();
-  board.startNewGame();
+  board.startNewGame('easy');
 
   $(document).keyup(function(evt){
     if ($(evt.target).hasClass('inputBox')){
@@ -13,7 +13,7 @@ $( document ).ready(function() {
         if (board.solution[location.row][location.col] === value){
           $(evt.target).parent().removeClass('wrongAnswer');
           if (isComplete()){
-            board.showMsg();
+            showMsg();
           }
         }else{
           $(evt.target).parent().addClass('wrongAnswer');
@@ -31,6 +31,13 @@ $( document ).ready(function() {
   });
 
   $('.newGame').on('click', function(){
-    board.startNewGame();
+    showLevel();
+  });
+
+  $('.easy, .medium, .hard').on('click', function(){
+    console.log($(this).text());
+    $('.level').hide();
+    board.startNewGame($(this).text());
   });
 });
+

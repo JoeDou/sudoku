@@ -42,8 +42,7 @@ function isComplete (){
   } else{
     return true;
   }
-};
-
+}
 
 function determineSection (col, row){
   var rowSec = Math.floor(row / 3);
@@ -60,4 +59,50 @@ function findEmpty (matrix){
     }
   }
   return null;
+}
+
+function createMsg (){
+  $complete = $('<div>');
+  $complete.addClass('complete');
+
+  $text = $('<p>').text('You Win');
+
+  $completeButton = $('<button>');
+  $completeButton.text('Close')
+    .click(function(){
+      $complete.hide();
+    });
+
+  $complete.append($text).append($completeButton).hide();
+
+  $('.gameboard').append($complete);
+}
+
+function showMsg (){
+  $msg = $('.complete');
+  $msg.show();
+}
+
+function createLevelSelection(){
+  $level = $('<div>');
+  $level.addClass('level');
+
+  $text = $('<p>').text('Select Level');
+  $level.append($text);
+
+  var arr = ['easy', 'medium', 'hard'];
+  for (var i=0;i<arr.length; i++){
+    var $button = $('<button>');
+    $button.text(arr[i])
+      .addClass(arr[i]);
+
+    $level.append($button);
+  }
+  $level.hide();
+  $('.gameboard').append($level);
+}
+
+function showLevel (){
+  $msg = $('.level');
+  $msg.show();
 }
