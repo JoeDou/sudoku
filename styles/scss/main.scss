@@ -28,9 +28,8 @@ header{
 .gameButton{
   text-align: center;
   button{
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 28px;
+    width: 120px;
+    font-size: 24px;
     font-family: $board-font;
     background-color: transparent;
     border: none;
@@ -81,7 +80,11 @@ header{
   border-color: red;
 }
 
-.message{
+.hint{
+  border-color: yellow;
+}
+
+.complete{
   background: $board-color2;
   width: 360px;
   font-family: $message-font;

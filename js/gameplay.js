@@ -1,56 +1,15 @@
-  // [[5, 3, 4, 6, 7, 8, 9, 1, 2],
-  // [6, 7, 2, 1, 9, 5, 3, 4, 8],
-  // [1, 9, 8, 3, 4, 2, 5, 6, 7],
-  // [8, 5, 9, 7, 6, 1, 4, 2, 3],
-  // [4, 2, 6, 8, 5, 3, 7, 9, 1],
-  // [7, 1, 3, 9, 2, 4, 8, 5, 6],
-  // [9, 6, 1, 5, 3, 7, 2, 8, 4],
-  // [2, 8, 7, 4, 1, 9, 6, 3, 5],
-  // [3, 4, 5, 2, 8, 6, 1, 7, 9]];
 function Gameboard(){
 
-  // this.matrix =
-  //  [['5', '3', '', '', '7', '', '', '', ''],
-  //   ['6', '', '', '1', '9', '5', '', '', ''],
-  //   ['1', '9', '8', '', '', '', '', '6', ''],
-  //   ['8', '', '', '', '6', '', '', '', '3'],
-  //   ['4', '', '', '8', '', '3', '', '', '1'],
-  //   ['7', '', '', '', '2', '', '', '', '6'],
-  //   ['', '6', '', '', '', '', '2', '8', ''],
-  //   ['', '', '', '4', '1', '9', '', '', '5'],
-  //   ['', '', '', '', '8', '', '', '7', '9']];
-
-  this.matrix =
-   [['5', '3', '4', '6', '7', '8', '9', '1', '2'],
-    ['6', '7', '2', '1', '9', '5', '3', '4', '8'],
-    ['1', '9', '8', '3', '4', '2', '5', '6', '7'],
-    ['8', '5', '9', '7', '6', '1', '4', '2', '3'],
-    ['4', '2', '6', '8', '5', '3', '7', '9', '1'],
-    ['7', '1', '3', '9', '2', '4', '8', '5', '6'],
-    ['9', '6', '1', '5', '3', '7', '2', '8', '4'],
-    ['2', '8', '7', '4', '1', '9', '6', '3', '5'],
-    ['3', '4', '5', '2', '8', '6', '', '7', '9']];
-
-  this.solution = $.extend(true,[],this.matrix);
-  
+  this.matrix =[];
+  this.jmatrix = [];
+  this.solution = [];
   this._rowHash = [];
   this._rowStack = [];
   this._colHash = [];
   this._colStack = [];
   this._secHash = {};
   this._secStack = {};
-
-
-  this.initialize();
-  this.findSolution(this.solution);
-
 }
-
-Gameboard.prototype.determineSection = function(col, row){
-  var rowSec = Math.floor(row / 3);
-  var colSec = Math.floor(col / 3);
-  return "" + colSec + rowSec;
-};
 
 Gameboard.prototype.initialize = function(){
   this._rowHash = [];
@@ -59,6 +18,7 @@ Gameboard.prototype.initialize = function(){
   this._colStack = [];
   this._secHash = {};
   this._secStack = {};
+
   for (var i=0; i<9; i++){
     this._rowHash.push({});
     this._rowStack.push([]);
@@ -68,13 +28,17 @@ Gameboard.prototype.initialize = function(){
     this._secHash[secString] = {};
     this._secStack[secString]= [];
   }
+};
+
+Gameboard.prototype.loadHashStack = function(){
+  this.initialize();
   for (var row =0; row < 9; row++){
     for (var col=0; col < 9; col++){
       var value = this.matrix[row][col];
       if (value){
         this._rowHash[row][value] = true;
         this._colHash[col][value] = true;
-        var secKey = this.determineSection(col,row);
+        var secKey = determineSection(col,row);
         var key = ''+col+row;
         this._secHash[secKey][value] = true;
       }
@@ -82,37 +46,28 @@ Gameboard.prototype.initialize = function(){
   }
 };
 
-Gameboard.prototype.findEmpty = function(matrix){
-  for (var rowIndex=0; rowIndex < matrix.length; rowIndex++){
-    for (var colIndex=0; colIndex < matrix[0].length; colIndex++){
-      if (matrix[rowIndex][colIndex] === ''){
-        return [colIndex, rowIndex];
-      }
-    }
-  }
-  return null;
-};
-
-Gameboard.prototype.findSolution = function(matrix){
-  var arr = this.findEmpty(matrix);
+Gameboard.prototype.findSolution = function(){
+  var arr = findEmpty(this.solution);
   if (arr === null){
     return true;
   }
   var col = arr[0];
   var row = arr[1];
 
-  var secKey = this.determineSection(col,row);
-  for (var i=1; i<10; i++){
-    if (!this._rowHash[row][i] && !this._colHash[col][i] && !this._secHash[secKey][i]){
-      matrix[row][col] = ''+i;
-      this._rowHash[row][i] = true;
-      this._rowStack[row].push(i);
-      this._colHash[col][i] = true;
-      this._colStack[col].push(i);
-      this._secHash[secKey][i] = true;
-      this._secStack[secKey].push(i);
-      if (!this.findSolution(matrix)){
-        matrix[row][col] = '';
+  var secKey = determineSection(col,row);
+  var possibleInput = createRandomInput();
+  for (var i=0; i<possibleInput.length; i++){
+    var val = possibleInput[i];
+    if (!this._rowHash[row][val] && !this._colHash[col][val] && !this._secHash[secKey][val]){
+      this.solution[row][col] = ''+val;
+      this._rowHash[row][val] = true;
+      this._rowStack[row].push(val);
+      this._colHash[col][val] = true;
+      this._colStack[col].push(val);
+      this._secHash[secKey][val] = true;
+      this._secStack[secKey].push(val);
+      if (!this.findSolution(this.solution)){
+        this.solution[row][col] = '';
         this._rowHash[row][this._rowStack[row].pop()] = false;
         this._colHash[col][this._colStack[col].pop()] = false;
         this._secHash[secKey][this._secStack[secKey].pop()] = false;
@@ -124,7 +79,139 @@ Gameboard.prototype.findSolution = function(matrix){
   return false;
 };
 
+Gameboard.prototype.createTable = function() {
+  var $td, $tr, $input;
+  var $table = $('<table>');
+  var $gameboard = $('.gameboard');
 
+  for ( var i = 0; i < 9; i++ ) {
+    $tr = $('<tr>');
+    var tempArr =[];
+    for ( var j = 0; j < 9; j++ ) {
+      $input = $('<input>')
+        .attr('maxlength','1')
+        .addClass('inputBox')
+        .data('col', j)
+        .data('row', i)
+        .val(this.matrix[i][j]);
 
+      if (this.matrix[i][j] !== ''){
+        $input.attr('readOnly', true);
+      }
+
+      tempArr.push($input);
+
+      $td = $('<td>').append($input);
+      if ((Math.floor(i/3) + Math.floor(j/3))%2){
+        $td.addClass('sectionOdd');
+      }else{
+        $td.addClass('sectionEven');
+      }
+      $tr.append($td);
+    }
+    $table.append($tr)
+      .attr('align','center');
+    this.jmatrix.push(tempArr);
+  }
+  $gameboard.append($table);
+  this.createMsg();
+};
+
+Gameboard.prototype.createMsg = function(){
+  $complete = $('<div>');
+  $complete.addClass('complete');
+
+  $text = $('<p>').text('You Win');
+
+  $completeButton = $('<button>');
+  $completeButton.text('Close')
+    .click(function(){
+      this.hideMsg();
+    }.bind(this));
+
+  $complete.append($text).append($completeButton).hide();
+
+  $('.gameboard').append($complete);
+};
+
+Gameboard.prototype.showMsg = function(){
+  $msg = $('.complete');
+  $msg.show();
+};
+
+Gameboard.prototype.hideMsg = function(){
+  $msg = $('.complete');
+  $msg.hide();
+};
+
+Gameboard.prototype.restart = function() {
+  this.initialize();
+  this.loadHashStack();
+  for (var row=0; row<9; row++){
+    for (var col=0; col<9; col++){
+      this.jmatrix[row][col].val(this.matrix[row][col]);
+      this.jmatrix[row][col].parent().removeClass('wrongAnswer');
+      this.jmatrix[row][col].parent().removeClass('hint');
+      if (this.matrix[row][col] === ''){
+        this.jmatrix[row][col].attr('readOnly', false);
+      }else{
+        this.jmatrix[row][col].attr('readOnly', true);
+      }
+    }
+  }
+};
+
+Gameboard.prototype.hint = function() {
+  this.removeHint();
+  var arr = $('.inputBox');
+  var tempArr = [];
+  for (var i =0; i< arr.length; i++){
+    if ($(arr[i]).val() === ''){
+      tempArr.push($(arr[i]));
+    }
+  }
+  if (tempArr.length < 1){
+    return;
+  }
+  var index = Math.floor(Math.random()*tempArr.length);
+  var pos = tempArr[index].data();
+  tempArr[index].val(this.solution[pos.row][pos.col])
+    .parent().addClass('hint');
+
+  if(isComplete()){
+    this.showMsg();
+  }
+};
+
+Gameboard.prototype.removeHint = function() {
+  $('.hint').removeClass('hint');
+};
+
+Gameboard.prototype.createSolution = function() {
+  initializeMatrix(this.solution);
+  this.initialize();
+  this.findSolution(this.solution);
+};
+
+Gameboard.prototype.createProblem = function(){
+  this.matrix = $.extend(true,[],this.solution);
+  var remove = 30;
+
+  while( remove > 0 ) {
+    var row = Math.floor( Math.random() * 9 );
+    var col = Math.floor( Math.random() * 9 );
+    this.matrix[row][col] = '';
+    remove--;
+  }
+};
+
+Gameboard.prototype.startNewGame = function(){
+  this.createSolution();
+  this.createProblem();
+  if (this.jmatrix.length === 0){
+    this.createTable();
+  }
+  this.restart();
+};
 
 
