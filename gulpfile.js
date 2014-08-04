@@ -6,8 +6,9 @@ var paths = {
   sass: ['styles/scss/**/*.scss']
 };
 
+//precompile sass
 gulp.task('sass', function () {
-    return gulp.src('./styles/scss/main.scss')
+    return gulp.src('./styles/scss/*.scss')
         .pipe(sass())
         .pipe(concat('style.css'))
         .pipe(gulp.dest('./styles'));
