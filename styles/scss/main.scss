@@ -5,11 +5,16 @@ $message-font: Arial,Helvetica,sans-serif;
 
 body{
   background-image: url("../img/tron.jpg");
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position:0px, -300px; 
 }
 
-.bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+table{
+  background-color: $board-color2;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius:10px;
+}
 
 td{
   border-color: $board-color1;
@@ -20,37 +25,29 @@ td{
 
 header{
   font-family: $board-font;
-  font-size: 80px;
+  font-size: 76px;
   text-align: center;
   color: $board-color1;
+  cursor: pointer;
+}
+
+button{
+  margin: 10px;
+  font-size: 16px;
+  background-color: $board-color1;
 }
 
 .gameButton{
   text-align: center;
   button{
-    width: 120px;
-    font-size: 24px;
+    width: 140px;
+    font-size: 22px;
     font-family: $board-font;
     background-color: transparent;
     border: none;
     color:$board-color1;
-    cursor: pointer;
+    margin: 0px;
   }
-}
-
-.gameboard{
-  background-color: $board-color2;
-  padding: 10px;
-  height: 360px;
-  width: 360px;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  border-color: Black;
-  border-style:solid;
-  border-width:2px;
-  border-radius:10px;
-
 }
 
 .inputBox{
@@ -86,37 +83,27 @@ header{
 
 .complete{
   background: $board-color2;
-  width: 360px;
+  width: 34%;
   font-family: $message-font;
   font-size: 24px;
   color: $board-color1;
-  margin-left: auto;
-  margin-right: auto;
-  top: 290px;
+  top: 265px;
+  left: 50%;
+  margin-left:-17%;
   position: fixed;
   text-align: center;
-  button{
-    margin: 10px;
-    font-size: 12px;
-    background-color: $board-color1;
-  }
 }
 
 .level{
   background: $board-color2;
-  width: 360px;
+  width: 50%;
   font-family: $message-font;
   font-size: 24px;
   color: $board-color1;
-  margin-left: auto;
-  margin-right: auto;
-  top: 290px;
+  top: 265px;
+  left: 50%;
+  margin-left: -25%;
   position: fixed;
   text-align: center;
-  button{
-    margin: 10px;
-    font-size: 12px;
-    background-color: $board-color1;
-  }
 }
 
