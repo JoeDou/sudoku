@@ -11,10 +11,14 @@ enter: https://github.com/JoeDou/sudoku
 - Highlight wrong input
 
 
-### Built with:
+### Technical:
 
+This version of SUDOKU uses the following technologies:
 - SASS ( CSS )
 - Gulp.js ( SASS build and livereload )
 - jQuery ( UI - DOM )
 - NodeJS ( For testig/performance purpose )
 - npm ( Dependency management )
+
+### License
+This version of SUDOKU is licensed under the [MIT license.](https://github.com/JoeDou/QuizzoMusic/blob/master/LICENSE.txt)
