@@ -4,6 +4,10 @@ This class includes all the functionalities related to the game play.
 -restart the board without generating new board
 -give user assistance by giving supplying an answer to a input box
 -create gameboard using jquery to attach to the DOM
+
+TODO:
+-create a check to make sure that there is only 1 solution-> should be able to reuse
+findSolution and return a count instead
 */
 function Gameboard(){
 
