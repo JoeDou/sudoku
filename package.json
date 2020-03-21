@@ -16,13 +16,8 @@
     "url": "https://github.com/JoeDou/sudoku/issues"
   },
   "homepage": "https://github.com/JoeDou/sudoku",
-  "devDependencies": {
-    "gulp": "^3.8.6",
-    "gulp-concat": "^2.2.0",
-    "gulp-sass": "^0.7.2",
-    "gulp-watch": "^0.6.8"
-  },
   "dependencies": {
-    "express": "^4.4.4"
+    "express": "^4.4.4",
+    "gh-pages": "^2.2.0"
   }
 }
