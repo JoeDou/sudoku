@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/JoeDou/sudoku",
   "dependencies": {
-    "express": "^4.4.4",
+    "express": "^4.17.3",
     "gh-pages": "^2.2.0"
   }
 }
